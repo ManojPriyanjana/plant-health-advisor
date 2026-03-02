@@ -205,3 +205,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# Ignore model files
+models/
+
+# Ignore sample images
+sample_images/
+
+__pycache__/
+*.pyc
