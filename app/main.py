@@ -58,6 +58,25 @@ def run_prediction(image_bytes: bytes, filename: str, model: str, top_k: int = 0
     return payload
 
 
+def render_ui(
+    request: Request,
+    result: dict | None = None,
+    error: str | None = None,
+    selected_model: str = "ensemble",
+    status_code: int = 200,
+):
+    return templates.TemplateResponse(
+        "ui_predict.html",
+        {
+            "request": request,
+            "result": result,
+            "error": error,
+            "selected_model": selected_model,
+        },
+        status_code=status_code,
+    )
+
+
 @app.get("/")
 def root():
     return {"message": "Plant Health Advisor API is running"}
@@ -70,15 +89,12 @@ def health():
 
 @app.get("/ui", response_class=HTMLResponse)
 def ui(request: Request):
-    return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "result": None,
-            "error": None,
-            "selected_model": "ensemble",
-        },
-    )
+    return render_ui(request=request)
+
+
+@app.get("/ui/predict", response_class=HTMLResponse)
+def ui_predict_form(request: Request):
+    return render_ui(request=request)
 
 
 @app.post("/ui/predict", response_class=HTMLResponse)
@@ -97,26 +113,20 @@ async def ui_predict(
             image_bytes=image_bytes,
             filename=file.filename or "uploaded_image",
             model=selected_model,
-            top_k=3,
+            top_k=5,
         )
-        return templates.TemplateResponse(
-            "index.html",
-            {
-                "request": request,
-                "result": result,
-                "error": None,
-                "selected_model": selected_model,
-            },
+        return render_ui(
+            request=request,
+            result=result,
+            error=None,
+            selected_model=selected_model,
         )
     except Exception as exc:
-        return templates.TemplateResponse(
-            "index.html",
-            {
-                "request": request,
-                "result": None,
-                "error": f"Prediction failed: {exc}",
-                "selected_model": selected_model,
-            },
+        return render_ui(
+            request=request,
+            result=None,
+            error=f"Prediction failed. Please check the image and try again. ({exc})",
+            selected_model=selected_model,
             status_code=400,
         )
 
