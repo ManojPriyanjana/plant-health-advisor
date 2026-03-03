@@ -1,0 +1,73 @@
+body {
+    background-color: #f4f6f8;
+    color: #1f2937;
+}
+
+.app-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.app-header h1 {
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.input-card {
+    position: sticky;
+    top: 1rem;
+}
+
+.preview-wrap {
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+}
+
+#previewImage {
+    max-height: 130px;
+    width: auto;
+    object-fit: cover;
+}
+
+.results-pane {
+    min-height: 70vh;
+}
+
+.meta-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    letter-spacing: 0.4px;
+}
+
+.meta-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.placeholder-card {
+    min-height: 480px;
+    border-style: dashed;
+}
+
+@media (max-width: 991.98px) {
+    .input-card {
+        position: static;
+    }
+
+    .results-pane {
+        min-height: auto;
+    }
+
+    .placeholder-card {
+        min-height: 260px;
+    }
+}
