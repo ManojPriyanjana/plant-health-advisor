@@ -60,6 +60,16 @@
 
                     {% if result %}
                     {% set confidence_percent = (result.confidence * 100)|round(2) %}
+                    {% if result.warnings %}
+                    <div class="alert alert-warning mb-3" role="alert">
+                        <div class="fw-semibold small mb-1">Reliability warnings</div>
+                        <ul class="small ps-3 mb-0">
+                            {% for warning in result.warnings %}
+                            <li>{{ warning|replace("___", " - ")|replace("_", " ") }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
                     <section class="card shadow-sm mb-3">
                         <div class="card-body">
                             <h2 class="h5 mb-3">Summary</h2>
@@ -70,7 +80,7 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-3">
                                     <div class="meta-label">Predicted Label</div>
-                                    <div class="meta-value">{{ result.predicted_label }}</div>
+                                    <div class="meta-value label-text">{{ result.predicted_label|replace("___", " - ")|replace("_", " ") }}</div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-3">
                                     <div class="meta-label">Filename</div>
@@ -84,6 +94,14 @@
                                     <div class="small text-muted mt-1">{{ confidence_percent }}%</div>
                                 </div>
                             </div>
+                            {% if result.model_comparison %}
+                            <hr class="my-3">
+                            <div class="small text-muted">
+                                <span class="fw-semibold">Model check:</span>
+                                mobilenet={{ result.model_comparison.mobilenet_label|replace("___", " - ")|replace("_", " ") }} ({{ (result.model_comparison.mobilenet_confidence * 100)|round(1) }}%),
+                                vit={{ result.model_comparison.vit_label|replace("___", " - ")|replace("_", " ") }} ({{ (result.model_comparison.vit_confidence * 100)|round(1) }}%)
+                            </div>
+                            {% endif %}
                         </div>
                     </section>
 
@@ -98,9 +116,9 @@
                                         {% set item_score = item.score if item.score is defined else item.confidence %}
                                         {% set item_percent = (item_score * 100)|round(1) %}
                                         <div>
-                                            <div class="d-flex justify-content-between small mb-1">
-                                                <span class="text-truncate pe-2">{{ item.label }}</span>
-                                                <span>{{ item_percent }}%</span>
+                                            <div class="prediction-row small mb-1">
+                                                <span class="prediction-label">{{ item.label|replace("___", " - ")|replace("_", " ") }}</span>
+                                                <span class="prediction-score">{{ item_percent }}%</span>
                                             </div>
                                             <div class="progress" style="height: 0.5rem;">
                                                 <div class="progress-bar bg-info" role="progressbar" style="width: {{ item_percent }}%;" aria-valuenow="{{ item_percent }}" aria-valuemin="0" aria-valuemax="100"></div>

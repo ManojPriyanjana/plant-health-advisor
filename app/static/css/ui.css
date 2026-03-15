@@ -53,6 +53,29 @@ body {
     word-break: break-word;
 }
 
+.label-text {
+    line-height: 1.35;
+}
+
+.prediction-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0.5rem;
+}
+
+.prediction-label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    line-height: 1.3;
+}
+
+.prediction-score {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: #4b5563;
+}
+
 .placeholder-card {
     min-height: 480px;
     border-style: dashed;

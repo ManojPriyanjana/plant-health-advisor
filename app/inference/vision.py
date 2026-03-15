@@ -5,8 +5,8 @@ import keras
 import numpy as np
 from PIL import Image
 
-from keras.applications.mobilenet_v2 import preprocess_input
 from app.inference.vit_layers import VIT_CUSTOM_OBJECTS
+from keras.applications.mobilenet_v2 import preprocess_input
 
 
 class VisionEnsemble:
@@ -19,6 +19,34 @@ class VisionEnsemble:
             custom_objects=VIT_CUSTOM_OBJECTS,
             compile=False,
         )
+
+        self.mobilenet_num_classes = self._infer_num_classes(self.mobilenet, "mobilenet")
+        self.vit_num_classes = self._infer_num_classes(self.vit, "vit")
+
+        if self.mobilenet_num_classes != self.vit_num_classes:
+            raise ValueError(
+                "Model output mismatch: "
+                f"mobilenet has {self.mobilenet_num_classes} classes, "
+                f"vit has {self.vit_num_classes} classes."
+            )
+
+        if len(self.class_names) != self.mobilenet_num_classes:
+            raise ValueError(
+                "CLASS_NAMES length does not match model output classes. "
+                f"CLASS_NAMES={len(self.class_names)}, model_classes={self.mobilenet_num_classes}. "
+                "Update CLASS_NAMES to exactly match your training label order."
+            )
+
+    def _infer_num_classes(self, model, model_name: str) -> int:
+        output_shape = model.output_shape
+        if isinstance(output_shape, list):
+            raise ValueError(f"{model_name} has multiple outputs; expected a single classification head.")
+
+        num_classes = output_shape[-1]
+        if not isinstance(num_classes, int) or num_classes <= 1:
+            raise ValueError(f"{model_name} output shape is invalid for classification: {output_shape}")
+
+        return num_classes
 
     def _to_probabilities(self, scores: np.ndarray) -> np.ndarray:
         probs = np.asarray(scores, dtype=np.float32).reshape(-1)
@@ -48,9 +76,11 @@ class VisionEnsemble:
         return self._to_probabilities(scores)
 
     def _label_for_index(self, index: int) -> str:
-        if 0 <= index < len(self.class_names):
-            return self.class_names[index]
-        return f"class_{index}"
+        if not 0 <= index < len(self.class_names):
+            raise IndexError(
+                f"Predicted class index {index} is out of range for CLASS_NAMES length {len(self.class_names)}."
+            )
+        return self.class_names[index]
 
     def predict(
         self,
@@ -67,6 +97,8 @@ class VisionEnsemble:
         elif model == "ensemble":
             pm = self._predict_mobilenet(x)
             pv = self._predict_vit(x)
+            if pm.shape != pv.shape:
+                raise ValueError(f"Model probability shape mismatch: mobilenet={pm.shape}, vit={pv.shape}")
             probs = (pm + pv) / 2.0
             probs = probs / np.sum(probs)
         else:
@@ -80,7 +112,7 @@ class VisionEnsemble:
         }
 
         if top_k > 0:
-            k = min(top_k, len(self.class_names))
+            k = min(top_k, probs.size)
             top_indices = np.argsort(probs)[::-1][:k]
             result["top_k"] = [
                 {"label": self._label_for_index(int(i)), "confidence": float(probs[int(i)])}
