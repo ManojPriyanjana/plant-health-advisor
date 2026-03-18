@@ -1,82 +1,73 @@
-* {
-    box-sizing: border-box;
-}
-
-body {
+.landing-body {
     margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f7f9;
-    color: #1f2933;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top left, #e0f2fe 0, #ecfdf3 35%, #f4f5fb 100%);
+    color: #0f172a;
 }
 
-.container {
-    max-width: 860px;
-    margin: 32px auto;
-    padding: 0 16px 24px;
+.landing-wrapper {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 32px 16px 40px;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
 }
 
-.card {
-    background: #ffffff;
-    border: 1px solid #d9e2ec;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+.landing-card {
+    width: 100%;
+    border-radius: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    padding: 28px 24px;
+}
+
+@media (min-width: 768px) {
+    .landing-card {
+        padding: 32px 32px 36px;
+    }
 }
 
 h1 {
-    margin-top: 0;
-    margin-bottom: 8px;
-}
-
-h2,
-h3 {
-    margin-bottom: 8px;
+    font-size: clamp(1.8rem, 2.4vw, 2.3rem);
+    font-weight: 700;
+    letter-spacing: 0.01em;
 }
 
 .subtitle {
-    margin-top: 0;
-    color: #52606d;
+    color: #4b5563;
+    max-width: 32rem;
 }
 
-form {
-    display: grid;
-    gap: 10px;
+.landing-highlights li {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #374151;
+    margin-bottom: 0.2rem;
 }
 
-label {
-    font-weight: 600;
+.landing-preview {
+    background: linear-gradient(135deg, #ecfdf5, #eff6ff);
+    border-radius: 18px;
 }
 
-input[type="file"],
-select,
-button {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #bcccdc;
-    font-size: 14px;
+.landing-preview .card-body {
+    padding: 18px 16px;
 }
 
-button {
-    background: #2f855a;
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
+@media (min-width: 768px) {
+    .landing-preview .card-body {
+        padding: 22px 20px;
+    }
 }
 
-button:hover {
-    background: #276749;
+.landing-preview ol {
+    padding-left: 1.1rem;
 }
 
-.error {
-    border-color: #f5c2c7;
-    background: #fff5f5;
-    color: #9b2c2c;
-}
-
-ul {
-    margin: 8px 0 0;
-    padding-left: 20px;
+.landing-preview li {
+    margin-bottom: 0.25rem;
 }
