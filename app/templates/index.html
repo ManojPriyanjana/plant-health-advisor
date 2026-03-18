@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plant Health Advisor</title>
+    <title>Agriculture Advisor (Plant Health Monitor)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
 </head>
@@ -12,9 +12,9 @@
         <section class="landing-card shadow-lg">
             <div class="row g-4 align-items-center">
                 <div class="col-12 col-md-6">
-                    <h1 class="mb-2">Plant Health Advisor</h1>
+                    <h1 class="mb-2">Agriculture Advisor <span class="text-muted fw-normal">(Plant Health Monitor)</span></h1>
                     <p class="subtitle mb-4">
-                        Upload a photo of your plant leaves and let our vision models detect potential diseases with guidance on treatment and prevention.
+                        Upload a crop/leaf photo and let our vision models detect potential diseases with guidance on treatment and prevention.
                     </p>
                     <ul class="landing-highlights list-unstyled mb-4">
                         <li><span class="badge bg-success-subtle text-success-emphasis me-2">✓</span> Ensemble of MobileNet &amp; ViT models</li>
@@ -22,7 +22,7 @@
                         <li><span class="badge bg-success-subtle text-success-emphasis me-2">✓</span> Actionable advisory and ontology terms</li>
                     </ul>
                     <a href="/ui" class="btn btn-success btn-lg">
-                        Open prediction workspace
+                        Open monitor dashboard
                     </a>
                 </div>
                 <div class="col-12 col-md-6">
